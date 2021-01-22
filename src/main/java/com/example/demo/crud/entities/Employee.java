@@ -1,4 +1,4 @@
-package com.example.demo.crud.models;
+package com.example.demo.crud.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "employees")
@@ -14,10 +15,13 @@ public class Employee {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	@Column(name = "first_name", nullable = false, length = 150)
+	@NotBlank(message = "El campo nombre es obligatorio")
 	private String firstName;
 	@Column(name = "last_name", nullable = false, length = 150)
+	@NotBlank(message = "El campo apellidos es obligatorio")
 	private String lastName;
 	@Column(name = "email_address", nullable = false, length = 150)
+	@NotBlank(message = "Debe especificar un correo")
 	private String emailId;
 
 	public Employee() {
