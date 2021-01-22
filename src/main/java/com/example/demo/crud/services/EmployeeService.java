@@ -12,30 +12,31 @@ import com.example.demo.crud.repository.IEmployeeRepository;
 @Service
 public class EmployeeService {
 	@Autowired
-	private IEmployeeRepository employeeRepository;
+	private IEmployeeRepository _repo;
+	private final String MESSAGE = "No se encontraron registros para el id: %s";
 
 	public List<Employee> getAll() {
-		return employeeRepository.findAll();
+		return _repo.findAll();
 	}
 
 	public Employee create(Employee data) {
-		return employeeRepository.save(data);
+		return _repo.save(data);
 	}
 
 	public Employee modify(Long employeeId, Employee data) throws ResourceNotFoundException {
-		Employee employee = employeeRepository.findById(employeeId)
-				.orElseThrow(() -> new ResourceNotFoundException("Employee not found for this id :: " + employeeId));
+		Employee employee = _repo.findById(employeeId)
+				.orElseThrow(() -> new ResourceNotFoundException(String.format(MESSAGE, employeeId)));
 
 		employee.setEmailId(data.getEmailId());
 		employee.setLastName(data.getLastName());
 		employee.setFirstName(data.getFirstName());
-		return employeeRepository.save(employee);
+		return _repo.save(employee);
 	}
 
 	public boolean delete(Long employeeId) throws ResourceNotFoundException {
-		Employee employee = employeeRepository.findById(employeeId)
-				.orElseThrow(() -> new ResourceNotFoundException("Employee not found for this id :: " + employeeId));
-		employeeRepository.delete(employee);
+		Employee employee = _repo.findById(employeeId)
+				.orElseThrow(() -> new ResourceNotFoundException(String.format(MESSAGE, employeeId)));
+		_repo.delete(employee);
 		return true;
 	}
 }
