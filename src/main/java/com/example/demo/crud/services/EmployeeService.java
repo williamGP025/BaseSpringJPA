@@ -1,11 +1,14 @@
 package com.example.demo.crud.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.crud.entities.Employee;
+import com.example.demo.crud.entities.HistoryEmployee;
+import com.example.demo.crud.exceptions.BadRequestException;
 import com.example.demo.crud.exceptions.ResourceNotFoundException;
 import com.example.demo.crud.repository.IEmployeeRepository;
 
@@ -19,7 +22,18 @@ public class EmployeeService {
 		return _repo.findAll();
 	}
 
-	public Employee create(Employee data) {
+	public Employee create(Employee data) throws BadRequestException {
+		// #region [Aplicando principio de IDEMPOTENCIA]
+		boolean find2 = _repo.findByEmailId(data.getEmailId()).size() > 0;
+		if (find2) {
+			throw BadRequestException.builder().message(
+					String.format("El correo: %s ya se encuentra registrado en la base de datos", data.getEmailId()))
+					.build();
+		}
+		// #endregion
+		List<HistoryEmployee> historyEmployees = new ArrayList<>();
+		historyEmployees.add(HistoryEmployee.builder().description("creacion de la entidad").build());
+		data.setHistoryEmployees(historyEmployees);
 		return _repo.save(data);
 	}
 

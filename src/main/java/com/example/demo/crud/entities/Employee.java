@@ -1,10 +1,13 @@
 package com.example.demo.crud.entities;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -36,4 +39,9 @@ public class Employee {
 	@NotBlank(message = "Debe especificar un correo")
 	@Email(message = "Formato de correo no valido")
 	private String emailId;
+
+	// #region [Relaciones]
+	@ManyToMany(mappedBy = "employees")
+	private List<HistoryEmployee> historyEmployees;
+	// #endregion
 }

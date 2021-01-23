@@ -25,11 +25,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(BadRequestException.class)
 	public ResponseEntity<?> resourceBadRequestException(BadRequestException ex, WebRequest request) {
-		List<Map<String, String>> details = ex.getErrors().stream().map(err -> {
+		List<Map<String, String>> details = ex.getErrors() != null ? ex.getErrors().stream().map(err -> {
 			Map<String, String> detError = new HashMap<>();
 			detError.put(err.getField(), err.getDefaultMessage());
 			return detError;
-		}).collect(Collectors.toList());
+		}).collect(Collectors.toList()) : null;
 		return new ResponseEntity<>(ErrorDetail.builder().message(ex.getMessage()).origin(request.getDescription(false))
 				.details(details).build(), HttpStatus.BAD_REQUEST);
 	}
