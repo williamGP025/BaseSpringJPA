@@ -2,6 +2,7 @@ package com.example.demo.crud.entities;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -41,7 +42,7 @@ public class Employee {
 	private String emailId;
 
 	// #region [Relaciones]
-	@ManyToMany(mappedBy = "employees")
+	@ManyToMany(mappedBy = "employees", cascade = CascadeType.ALL)
 	private List<HistoryEmployee> historyEmployees;
 	// #endregion
 }
