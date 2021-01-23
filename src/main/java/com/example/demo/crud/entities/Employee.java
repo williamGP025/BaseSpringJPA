@@ -6,7 +6,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,6 +26,7 @@ public class Employee {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	@Column(name = "first_name", nullable = false, length = 150)
+	@Size(min = 3, max = 150, message = "Logitud de cadena incorrecta debe estan entre 3 y 150 caracteres")
 	@NotBlank(message = "El campo nombre es obligatorio")
 	private String firstName;
 	@Column(name = "last_name", nullable = false, length = 150)
@@ -31,5 +34,6 @@ public class Employee {
 	private String lastName;
 	@Column(name = "email_address", nullable = false, length = 150)
 	@NotBlank(message = "Debe especificar un correo")
+	@Email(message = "Formato de correo no valido")
 	private String emailId;
 }
