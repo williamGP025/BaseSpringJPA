@@ -1,9 +1,7 @@
 package com.example.demo.crud.services;
 
+import java.util.Arrays;
 import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,13 +11,14 @@ import com.example.demo.crud.entities.HistoryEmployee;
 import com.example.demo.crud.exceptions.BadRequestException;
 import com.example.demo.crud.exceptions.ResourceNotFoundException;
 import com.example.demo.crud.repository.IEmployeeRepository;
+import com.example.demo.crud.repository.IHistoryEmployeeRepository;
 
 @Service
 public class EmployeeService {
 	@Autowired
 	private IEmployeeRepository _repo;
-	@PersistenceContext
-	private EntityManager _entityManager;
+	@Autowired
+	private IHistoryEmployeeRepository _history;
 	private final String MESSAGE = "No se encontraron registros para el id: %s";
 
 	public List<Employee> getAll() {
@@ -35,11 +34,13 @@ public class EmployeeService {
 					.build();
 		}
 		// #endregion
-		data.addHistoryEmployee(HistoryEmployee.builder().description("creacion de la entidad").build());
-		// _entityManager.getTransaction().begin();
-		// _entityManager.merge(data);
-		// _entityManager.getTransaction().commit();
-		return _repo.save(data);
+		/**
+		 * para tener el insert en cascada, se debe guardar a partir del repositorio que
+		 * implementa la creacion de la tabla rel_
+		 */
+		_history.save(
+				HistoryEmployee.builder().description("creacion de la entidad").employees(Arrays.asList(data)).build());
+		return data;
 	}
 
 	public Employee modify(Long employeeId, Employee data) throws ResourceNotFoundException {

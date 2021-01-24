@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -43,7 +44,7 @@ public class Employee {
 	private String emailId;
 
 	// #region [Relaciones]
-	@ManyToMany(mappedBy = "employees", cascade = CascadeType.ALL)
+	@ManyToMany(mappedBy = "employees", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<HistoryEmployee> historyEmployees;
 
 	// #endregion

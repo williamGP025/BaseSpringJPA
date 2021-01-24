@@ -27,7 +27,7 @@ import com.example.demo.crud.services.EmployeeService;
 @RequestMapping("/api/v1/employees")
 public class EmployeeController {
 	@Autowired
-	private EmployeeService employeeService;
+	private EmployeeService _service;
 
 	@PostMapping()
 	public ResponseEntity<Employee> create(@Valid @RequestBody Employee employee, BindingResult brBindingResult)
@@ -36,25 +36,25 @@ public class EmployeeController {
 			throw BadRequestException.builder().message("No se puede crear la entidad")
 					.errors(brBindingResult.getFieldErrors()).build();
 		}
-		return ResponseEntity.ok(employeeService.create(employee));
+		return ResponseEntity.ok(_service.create(employee));
 	}
 
 	@GetMapping()
 	public List<Employee> read() {
-		return employeeService.getAll();
+		return _service.getAll();
 	}
 
 	@PutMapping("{id}")
 	public ResponseEntity<Employee> update(@Valid @PathVariable(value = "id") Long employeeId,
 			@RequestBody Employee employeeDetails) throws ResourceNotFoundException {
-		return ResponseEntity.ok(employeeService.modify(employeeId, employeeDetails));
+		return ResponseEntity.ok(_service.modify(employeeId, employeeDetails));
 	}
 
 	@DeleteMapping("{id}")
 	public Map<String, Boolean> delete(@Valid @PathVariable(value = "id") Long employeeId)
 			throws ResourceNotFoundException {
 		Map<String, Boolean> response = new HashMap<>();
-		response.put("deleted", employeeService.delete(employeeId));
+		response.put("deleted", _service.delete(employeeId));
 		return response;
 	}
 }

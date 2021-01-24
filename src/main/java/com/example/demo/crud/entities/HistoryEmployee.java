@@ -25,12 +25,14 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "history_employees")
 @Data
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class HistoryEmployee {
     // #region [Columns table]
     @Id
@@ -47,7 +49,9 @@ public class HistoryEmployee {
     @Valid
     @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "rel_history_employees", joinColumns = @JoinColumn(name = "fk_history_employee_id", nullable = false, table = "history_employees"), inverseJoinColumns = @JoinColumn(nullable = false, name = "fk_employee_id", table = "employees"))
+    @JoinTable(name = "rel_history_employees", joinColumns = {
+            @JoinColumn(nullable = false, name = "fk_history_id") }, inverseJoinColumns = {
+                    @JoinColumn(nullable = false, name = "fk_employee_id") })
     private List<Employee> employees;
     // #endregion
 
