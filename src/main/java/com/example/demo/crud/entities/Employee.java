@@ -1,5 +1,6 @@
 package com.example.demo.crud.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -44,5 +45,12 @@ public class Employee {
 	// #region [Relaciones]
 	@ManyToMany(mappedBy = "employees", cascade = CascadeType.ALL)
 	private List<HistoryEmployee> historyEmployees;
+
 	// #endregion
+	public void addHistoryEmployee(HistoryEmployee trace) {
+		if (historyEmployees == null) {
+			historyEmployees = new ArrayList<>();
+		}
+		this.historyEmployees.add(trace);
+	}
 }

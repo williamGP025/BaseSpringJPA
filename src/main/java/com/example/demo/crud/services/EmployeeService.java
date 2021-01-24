@@ -1,7 +1,9 @@
 package com.example.demo.crud.services;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,8 @@ import com.example.demo.crud.repository.IEmployeeRepository;
 public class EmployeeService {
 	@Autowired
 	private IEmployeeRepository _repo;
+	@PersistenceContext
+	private EntityManager _entityManager;
 	private final String MESSAGE = "No se encontraron registros para el id: %s";
 
 	public List<Employee> getAll() {
@@ -31,9 +35,10 @@ public class EmployeeService {
 					.build();
 		}
 		// #endregion
-		List<HistoryEmployee> historyEmployees = new ArrayList<>();
-		historyEmployees.add(HistoryEmployee.builder().description("creacion de la entidad").build());
-		data.setHistoryEmployees(historyEmployees);
+		data.addHistoryEmployee(HistoryEmployee.builder().description("creacion de la entidad").build());
+		// _entityManager.getTransaction().begin();
+		// _entityManager.merge(data);
+		// _entityManager.getTransaction().commit();
 		return _repo.save(data);
 	}
 
