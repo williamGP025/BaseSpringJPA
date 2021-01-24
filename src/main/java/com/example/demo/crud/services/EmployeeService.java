@@ -38,8 +38,7 @@ public class EmployeeService {
 		 * para tener el insert en cascada, se debe guardar a partir del repositorio que
 		 * implementa la creacion de la tabla rel_
 		 */
-		_history.save(
-				HistoryEmployee.builder().description("creacion de la entidad").employees(Arrays.asList(data)).build());
+		_history.save(HistoryEmployee.builder().description("creado").employees(Arrays.asList(data)).build());
 		return data;
 	}
 
@@ -50,7 +49,8 @@ public class EmployeeService {
 		employee.setEmailId(data.getEmailId());
 		employee.setLastName(data.getLastName());
 		employee.setFirstName(data.getFirstName());
-		return _repo.save(employee);
+		_history.save(HistoryEmployee.builder().description("actualizado").employees(Arrays.asList(employee)).build());
+		return employee;
 	}
 
 	public boolean delete(Long employeeId) throws ResourceNotFoundException {
